@@ -16,7 +16,7 @@
       "title": "Priority Selection on Create",
       "description": "Add priority selector to task creation form with options High, Medium, Low and default to Medium",
       "priority": 2,
-      "passes": false
+      "passes": true
     },
     {
       "id": "US-3",

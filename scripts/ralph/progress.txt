@@ -18,3 +18,15 @@ Thread: https://ampcode.com/threads/T-019bc567-806c-7243-9b07-be995f5eb365
   - Task interface and all state/logic is in App.tsx (no separate files)
   - Existing tasks use sample data initialized in useState
 ---
+
+## Fri Jan 16 2026 - US-2
+Thread: https://ampcode.com/threads/T-019bc56a-b3d6-7748-a338-f18935364d2e
+- Added `newTaskPriority` state with default 'medium'
+- Added priority select dropdown to task creation form with High/Medium/Low options
+- Updated `addTask` to use selected priority and reset to 'medium' after adding
+- Added `.priority-select` CSS class for styling
+- Files changed: src/App.tsx, src/App.css
+- **Learnings for future iterations:**
+  - Use `Task['priority']` type for priority state to keep types in sync
+  - Form reset should include all input states (title + priority)
+---
