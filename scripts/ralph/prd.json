@@ -9,7 +9,7 @@
       "title": "Priority Data Model & Default",
       "description": "Add priority field to Task interface with type 'high' | 'medium' | 'low' and default to 'medium'",
       "priority": 1,
-      "passes": false
+      "passes": true
     },
     {
       "id": "US-2",

@@ -1,3 +1,20 @@
 # Ralph Progress Log
 Started: Fri Jan 16 11:34:11 SLST 2026
+
+## Codebase Patterns
+- Use `npm run typecheck` to verify TypeScript changes
+- Task interface is in src/App.tsx - all task properties defined there
+- Sample tasks are initialized in useState with default data
+
+---
+
+## Fri Jan 16 2026 - US-1
+Thread: https://ampcode.com/threads/T-019bc567-806c-7243-9b07-be995f5eb365
+- Added `priority: 'high' | 'medium' | 'low'` field to Task interface
+- Updated sample tasks to include priority: 'medium'
+- Updated addTask function to default new tasks to 'medium' priority
+- Files changed: src/App.tsx
+- **Learnings for future iterations:**
+  - Task interface and all state/logic is in App.tsx (no separate files)
+  - Existing tasks use sample data initialized in useState
 ---

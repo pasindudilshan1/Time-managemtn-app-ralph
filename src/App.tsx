@@ -14,6 +14,7 @@ function App() {
     { id: '2', title: 'Sample Task 2', completed: true, priority: 'medium' },
   ])
   const [newTaskTitle, setNewTaskTitle] = useState('')
+  const [newTaskPriority, setNewTaskPriority] = useState<Task['priority']>('medium')
 
   const addTask = () => {
     if (newTaskTitle.trim()) {
@@ -23,10 +24,11 @@ function App() {
           id: Date.now().toString(),
           title: newTaskTitle,
           completed: false,
-          priority: 'medium',
+          priority: newTaskPriority,
         },
       ])
       setNewTaskTitle('')
+      setNewTaskPriority('medium')
     }
   }
 
@@ -52,6 +54,15 @@ function App() {
           onKeyPress={(e) => e.key === 'Enter' && addTask()}
           placeholder="Enter new task..."
         />
+        <select
+          value={newTaskPriority}
+          onChange={(e) => setNewTaskPriority(e.target.value as Task['priority'])}
+          className="priority-select"
+        >
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
         <button onClick={addTask}>Add Task</button>
       </div>
 
