@@ -5,12 +5,13 @@ interface Task {
   id: string
   title: string
   completed: boolean
+  priority: 'high' | 'medium' | 'low'
 }
 
 function App() {
   const [tasks, setTasks] = useState<Task[]>([
-    { id: '1', title: 'Sample Task 1', completed: false },
-    { id: '2', title: 'Sample Task 2', completed: true },
+    { id: '1', title: 'Sample Task 1', completed: false, priority: 'medium' },
+    { id: '2', title: 'Sample Task 2', completed: true, priority: 'medium' },
   ])
   const [newTaskTitle, setNewTaskTitle] = useState('')
 
@@ -22,6 +23,7 @@ function App() {
           id: Date.now().toString(),
           title: newTaskTitle,
           completed: false,
+          priority: 'medium',
         },
       ])
       setNewTaskTitle('')
