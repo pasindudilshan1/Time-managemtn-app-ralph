@@ -68,12 +68,15 @@ function App() {
 
       <div className="task-list">
         {tasks.map(task => (
-          <div key={task.id} className={`task-card ${task.completed ? 'completed' : ''}`}>
+          <div key={task.id} className={`task-card priority-${task.priority} ${task.completed ? 'completed' : ''}`}>
             <input
               type="checkbox"
               checked={task.completed}
               onChange={() => toggleTask(task.id)}
             />
+            <span className={`priority-badge priority-badge-${task.priority}`}>
+              {task.priority.charAt(0).toUpperCase() + task.priority.slice(1)}
+            </span>
             <span className="task-title">{task.title}</span>
             <button onClick={() => deleteTask(task.id)} className="delete-btn">
               Delete

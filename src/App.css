@@ -93,3 +93,39 @@ input[type="checkbox"] {
   height: 18px;
   cursor: pointer;
 }
+
+/* Priority border colors */
+.task-card.priority-high {
+  border-left: 4px solid #dc2626;
+}
+
+.task-card.priority-medium {
+  border-left: 4px solid #f59e0b;
+}
+
+.task-card.priority-low {
+  border-left: 4px solid #6b7280;
+}
+
+/* Priority badge styles */
+.priority-badge {
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.priority-badge-high {
+  background: #fecaca;
+  color: #dc2626;
+}
+
+.priority-badge-medium {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.priority-badge-low {
+  background: #e5e7eb;
+  color: #4b5563;
+}
