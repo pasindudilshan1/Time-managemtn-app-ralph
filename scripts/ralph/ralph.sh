@@ -10,6 +10,7 @@ PRD_FILE="$SCRIPT_DIR/prd.json"
 PROGRESS_FILE="$SCRIPT_DIR/progress.txt"
 ARCHIVE_DIR="$SCRIPT_DIR/archive"
 LAST_BRANCH_FILE="$SCRIPT_DIR/.last-branch"
+PROMPT_FILE="$SCRIPT_DIR/prompt.md"
 
 # Archive previous run if branch changed
 if [ -f "$PRD_FILE" ] && [ -f "$LAST_BRANCH_FILE" ]; then
@@ -17,9 +18,7 @@ if [ -f "$PRD_FILE" ] && [ -f "$LAST_BRANCH_FILE" ]; then
   LAST_BRANCH=$(cat "$LAST_BRANCH_FILE" 2>/dev/null || echo "")
   
   if [ -n "$CURRENT_BRANCH" ] && [ -n "$LAST_BRANCH" ] && [ "$CURRENT_BRANCH" != "$LAST_BRANCH" ]; then
-    # Archive the previous run
     DATE=$(date +%Y-%m-%d)
-    # Strip "ralph/" prefix from branch name for folder
     FOLDER_NAME=$(echo "$LAST_BRANCH" | sed 's|^ralph/||')
     ARCHIVE_FOLDER="$ARCHIVE_DIR/$DATE-$FOLDER_NAME"
     
@@ -29,7 +28,6 @@ if [ -f "$PRD_FILE" ] && [ -f "$LAST_BRANCH_FILE" ]; then
     [ -f "$PROGRESS_FILE" ] && cp "$PROGRESS_FILE" "$ARCHIVE_FOLDER/"
     echo "   Archived to: $ARCHIVE_FOLDER"
     
-    # Reset progress file for new run
     echo "# Ralph Progress Log" > "$PROGRESS_FILE"
     echo "Started: $(date)" >> "$PROGRESS_FILE"
     echo "---" >> "$PROGRESS_FILE"
@@ -51,30 +49,61 @@ if [ ! -f "$PROGRESS_FILE" ]; then
   echo "---" >> "$PROGRESS_FILE"
 fi
 
+# Verify opencode is installed
+if ! command -v opencode &> /dev/null; then
+  echo "ERROR: opencode CLI not found. Install it with:"
+  echo "  npm install -g @opencode/cli"
+  exit 1
+fi
+
 echo "Starting Ralph - Max iterations: $MAX_ITERATIONS"
+echo "================================================"
 
 for i in $(seq 1 $MAX_ITERATIONS); do
   echo ""
   echo "═══════════════════════════════════════════════════════"
   echo "  Ralph Iteration $i of $MAX_ITERATIONS"
   echo "═══════════════════════════════════════════════════════"
+  echo ""
   
-  # Run amp with the ralph prompt
-  OUTPUT=$(cat "$SCRIPT_DIR/prompt.md" | amp --dangerously-allow-all 2>&1 | tee /dev/stderr) || true
+  # Read the prompt content
+  PROMPT_CONTENT=$(cat "$PROMPT_FILE")
+  
+  # Run opencode run with the prompt
+  # --log-level ERROR keeps output clean
+  # The command will work in the current directory
+  OUTPUT=$(opencode run --log-level ERROR "$PROMPT_CONTENT" 2>&1 | tee /dev/stderr) || true
   
   # Check for completion signal
   if echo "$OUTPUT" | grep -q "<promise>COMPLETE</promise>"; then
     echo ""
-    echo "Ralph completed all tasks!"
+    echo "✓ Ralph completed all tasks!"
     echo "Completed at iteration $i of $MAX_ITERATIONS"
     exit 0
   fi
   
+  # Check if PRD shows all stories complete
+  if [ -f "$PRD_FILE" ]; then
+    ALL_COMPLETE=$(jq -r '
+      .userStories | 
+      map(select(.passes == false)) | 
+      length == 0
+    ' "$PRD_FILE" 2>/dev/null || echo "false")
+    
+    if [ "$ALL_COMPLETE" = "true" ]; then
+      echo ""
+      echo "✓ All user stories marked as complete in PRD!"
+      echo "Completed at iteration $i of $MAX_ITERATIONS"
+      exit 0
+    fi
+  fi
+  
+  echo ""
   echo "Iteration $i complete. Continuing..."
   sleep 2
 done
 
 echo ""
-echo "Ralph reached max iterations ($MAX_ITERATIONS) without completing all tasks."
+echo "⚠ Ralph reached max iterations ($MAX_ITERATIONS) without completing all tasks."
 echo "Check $PROGRESS_FILE for status."
 exit 1

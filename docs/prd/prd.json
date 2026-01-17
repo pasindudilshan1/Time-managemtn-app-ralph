@@ -1,173 +1,291 @@
 {
-  "title": "Task Priority Levels",
-  "version": "1.0",
-  "overview": "Add priority levels (High, Medium, Low) to tasks in the Task Manager application, allowing users to categorize and visually distinguish tasks by importance.",
+  "title": "Simple Time Management App",
+  "version": "2.0",
+  "overview": "A clean, intuitive time management application that helps users track tasks with time estimates, monitor time spent, and manage their daily workload efficiently. The app focuses on simplicity while providing essential time tracking features.",
   "problemStatement": {
-    "description": "Currently, all tasks appear with equal visual weight.",
+    "description": "People struggle to manage their time effectively.",
     "painPoints": [
-      "Cannot identify urgent tasks at a glance",
-      "Cannot organize work by importance",
-      "Cannot focus on high-priority items first"
+      "Don't estimate how long tasks will take",
+      "Lose track of time spent on activities",
+      "Can't prioritize work based on available time",
+      "Have no visibility into their daily time allocation",
+      "Get overwhelmed by complex time tracking tools"
     ]
   },
   "goalsAndMetrics": [
     {
-      "goal": "Enable task prioritization",
-      "metric": "Users can assign priority to 100% of tasks"
+      "goal": "Quick task capture",
+      "metric": "Users can create a task in < 5 seconds"
     },
     {
-      "goal": "Improve task visibility",
-      "metric": "Priority indicated visually within 1 second of viewing"
+      "goal": "Accurate time tracking",
+      "metric": "90% of tasks have time estimates"
     },
     {
-      "goal": "Maintain simplicity",
-      "metric": "No more than 1 additional click to set priority"
+      "goal": "Simple time logging",
+      "metric": "Track time with 1-click start/stop"
+    },
+    {
+      "goal": "Daily overview",
+      "metric": "View total time planned vs spent"
+    },
+    {
+      "goal": "Minimal learning curve",
+      "metric": "New users productive within 2 minutes"
     }
   ],
   "userStories": [
     {
       "id": "US-1",
       "persona": "user",
-      "action": "assign a priority level when creating a task",
-      "benefit": "categorize its importance upfront"
+      "action": "create tasks with estimated time duration",
+      "benefit": "plan my day effectively"
     },
     {
       "id": "US-2",
       "persona": "user",
-      "action": "change the priority of an existing task",
-      "benefit": "adjust as priorities shift"
+      "action": "start/stop a timer for active tasks",
+      "benefit": "track actual time spent"
     },
     {
       "id": "US-3",
       "persona": "user",
-      "action": "visually distinguish tasks by priority",
-      "benefit": "quickly identify urgent work"
+      "action": "see remaining time for tasks",
+      "benefit": "know what I can realistically complete"
     },
     {
       "id": "US-4",
       "persona": "user",
-      "action": "new tasks default to Medium priority",
-      "benefit": "don't have to set it every time"
+      "action": "view total time planned and spent today",
+      "benefit": "manage my workload"
+    },
+    {
+      "id": "US-5",
+      "persona": "user",
+      "action": "mark tasks as complete",
+      "benefit": "track my progress"
+    },
+    {
+      "id": "US-6",
+      "persona": "user",
+      "action": "categorize tasks",
+      "benefit": "organize different types of work"
+    },
+    {
+      "id": "US-7",
+      "persona": "user",
+      "action": "see visual indicators for time status",
+      "benefit": "quickly identify overdue items"
     }
   ],
   "functionalRequirements": [
     {
       "id": "FR-1",
-      "title": "Priority Data Model",
+      "title": "Task Data Model",
       "requirements": [
-        "Add priority field to Task interface",
-        "Type: 'high' | 'medium' | 'low'",
-        "Default value: 'medium'"
+        "id: string",
+        "title: string (required)",
+        "description: string (optional)",
+        "estimatedMinutes: number",
+        "actualMinutes: number",
+        "category: 'work' | 'personal' | 'urgent' | 'other'",
+        "status: 'pending' | 'in-progress' | 'completed'",
+        "isTimerActive: boolean",
+        "timerStartTime: number (optional)",
+        "createdAt: number",
+        "completedAt: number (optional)"
       ]
     },
     {
       "id": "FR-2",
-      "title": "Priority Selection on Create",
+      "title": "Task Creation",
       "requirements": [
-        "Add priority selector to task creation form",
-        "Options: High, Medium, Low",
-        "Default selection: Medium"
+        "Input field for task title (required)",
+        "Time estimate input in minutes (default: 30)",
+        "Category selector dropdown",
+        "Optional description field",
+        "Add Task button",
+        "Validate title is not empty"
       ]
     },
     {
       "id": "FR-3",
-      "title": "Priority Display",
+      "title": "Time Tracking",
       "requirements": [
-        "Show priority indicator on each task card",
-        "High: Red accent/badge",
-        "Medium: Yellow/orange accent/badge",
-        "Low: Gray accent/badge"
+        "Start/Stop timer button on each task",
+        "Only one timer can be active at a time",
+        "Timer updates every second while active",
+        "Automatically adds elapsed time to actualMinutes",
+        "Visual indicator for active timer (pulsing icon)"
       ]
     },
     {
       "id": "FR-4",
-      "title": "Priority Editing",
+      "title": "Task Display",
       "requirements": [
-        "Allow changing priority on existing tasks",
-        "Inline dropdown or clickable badge"
+        "Show task title, category badge, and time info",
+        "Display estimated time vs actual time spent",
+        "Progress bar showing time completion percentage",
+        "Status indicator (pending, in-progress, completed)",
+        "Action buttons: Start/Stop, Complete, Delete"
       ]
     },
     {
       "id": "FR-5",
-      "title": "State Management",
+      "title": "Time Summary Dashboard",
       "requirements": [
-        "Update addTask to include priority",
-        "Update Task[] state to persist priority"
+        "Total estimated time for all pending tasks",
+        "Total actual time spent today",
+        "Number of tasks completed today",
+        "Time remaining (estimated - actual)",
+        "Visual progress indicator"
+      ]
+    },
+    {
+      "id": "FR-6",
+      "title": "Task Management",
+      "requirements": [
+        "Mark tasks as complete (moves to completed section)",
+        "Delete tasks",
+        "Filter by: All, Pending, In Progress, Completed",
+        "Filter by category",
+        "Sort by: Created date, Estimated time, Actual time"
+      ]
+    },
+    {
+      "id": "FR-7",
+      "title": "Local Storage Persistence",
+      "requirements": [
+        "Save tasks to localStorage",
+        "Load tasks on app startup",
+        "Auto-save on every change",
+        "Preserve timer state on refresh"
       ]
     }
   ],
   "nonFunctionalRequirements": [
     {
       "category": "Performance",
-      "specification": "Priority change must update UI in < 100ms"
+      "specification": "UI updates in < 50ms"
+    },
+    {
+      "category": "Responsiveness",
+      "specification": "Works on mobile, tablet, desktop"
+    },
+    {
+      "category": "Data Persistence",
+      "specification": "Tasks saved locally, no data loss"
     },
     {
       "category": "Accessibility",
-      "specification": "Priority selector must be keyboard navigable"
+      "specification": "Keyboard navigable, ARIA labels"
     },
     {
-      "category": "Accessibility",
-      "specification": "Color not sole indicator (include text/icon)"
+      "category": "Browser Support",
+      "specification": "Chrome, Firefox, Safari, Edge (latest)"
     }
   ],
   "technicalApproach": {
-    "dataModel": {
-      "interface": "Task",
-      "fields": {
-        "id": "string",
-        "title": "string",
-        "completed": "boolean",
-        "priority": "'high' | 'medium' | 'low'"
-      }
-    },
-    "newState": {
-      "name": "newTaskPriority",
-      "type": "'high' | 'medium' | 'low'",
-      "default": "'medium'"
-    },
-    "functions": [
-      {
-        "name": "addTask",
-        "changes": "Include priority from newTaskPriority state"
-      },
-      {
-        "name": "changePriority",
-        "signature": "(id: string, priority: 'high' | 'medium' | 'low') => void",
-        "description": "Update priority for existing task"
-      }
+    "componentStructure": [
+      "App.tsx",
+      "TimeHeader (daily summary stats)",
+      "TaskInput (create new task form)",
+      "FilterControls (filter/sort options)",
+      "TaskList",
+      "TaskItem (individual task with timer)"
     ],
-    "styling": {
-      "borderColors": {
-        "high": "#dc2626",
-        "medium": "#f59e0b",
-        "low": "#6b7280"
-      },
-      "badgeColors": {
-        "high": { "background": "#fecaca", "text": "#dc2626" },
-        "medium": { "background": "#fef3c7", "text": "#d97706" },
-        "low": { "background": "#e5e7eb", "text": "#4b5563" }
-      }
+    "coreFunctions": [
+      "addTask(task: Omit<Task, 'id' | 'createdAt'>)",
+      "startTimer(taskId: string)",
+      "stopTimer(taskId: string)",
+      "completeTask(taskId: string)",
+      "deleteTask(taskId: string)",
+      "updateTask(taskId: string, updates: Partial<Task>)"
+    ]
+  },
+  "uiGuidelines": {
+    "colorScheme": {
+      "primary": "#3b82f6",
+      "success": "#10b981",
+      "warning": "#f59e0b",
+      "danger": "#ef4444",
+      "neutral": "#6b7280"
+    },
+    "typography": {
+      "headers": "24px, bold",
+      "taskTitles": "16px, medium",
+      "timeInfo": "14px, regular",
+      "categoryBadges": "12px, bold"
+    },
+    "timeStatusIndicators": {
+      "underEstimate": "Green progress bar",
+      "nearEstimate": "Amber progress bar (90%+)",
+      "overEstimate": "Red progress bar"
+    },
+    "categoryBadges": {
+      "work": "Blue",
+      "personal": "Purple",
+      "urgent": "Red",
+      "other": "Gray"
     }
   },
-  "uiuxConsiderations": [
-    "Priority selector: Dropdown or segmented button group",
-    "Badge position: After task title, before delete button",
-    "Color scheme: Red (urgent) → Yellow (normal) → Gray (low)",
-    "Include text label with color for accessibility"
-  ],
   "outOfScope": [
-    "Sorting/filtering by priority",
-    "Custom priority levels",
-    "Priority-based notifications",
-    "Drag-and-drop reordering by priority"
+    "Calendar integration",
+    "Recurring tasks",
+    "Team collaboration",
+    "Reports and analytics",
+    "Cloud sync",
+    "Mobile app",
+    "Notifications"
   ],
-  "timeline": {
-    "phases": [
-      { "phase": 1, "deliverable": "Data model + create form", "estimate": "1 hour" },
-      { "phase": 2, "deliverable": "Visual display + styling", "estimate": "1 hour" },
-      { "phase": 3, "deliverable": "Edit priority functionality", "estimate": "30 min" },
-      { "phase": 4, "deliverable": "Testing + polish", "estimate": "30 min" }
-    ],
-    "totalEstimate": "3 hours"
-  }
+  "successCriteria": [
+    "User can create, track, and complete tasks",
+    "Timer accurately tracks time spent",
+    "Dashboard shows meaningful time summaries",
+    "App is responsive and performant",
+    "Data persists across sessions"
+  ],
+  "timeline": [
+    {
+      "phase": 1,
+      "deliverable": "Data model + basic UI structure",
+      "estimate": "2 hours"
+    },
+    {
+      "phase": 2,
+      "deliverable": "Task creation & display",
+      "estimate": "2 hours"
+    },
+    {
+      "phase": 3,
+      "deliverable": "Timer functionality",
+      "estimate": "2 hours"
+    },
+    {
+      "phase": 4,
+      "deliverable": "Summary dashboard",
+      "estimate": "1 hour"
+    },
+    {
+      "phase": 5,
+      "deliverable": "Filters & sorting",
+      "estimate": "1 hour"
+    },
+    {
+      "phase": 6,
+      "deliverable": "LocalStorage persistence",
+      "estimate": "1 hour"
+    },
+    {
+      "phase": 7,
+      "deliverable": "Styling & polish",
+      "estimate": "2 hours"
+    },
+    {
+      "phase": 8,
+      "deliverable": "Testing & bug fixes",
+      "estimate": "1 hour"
+    }
+  ],
+  "totalEstimate": "12 hours"
 }

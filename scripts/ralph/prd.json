@@ -1,59 +1,384 @@
 {
-  "title": "Task Priority Levels",
-  "branchName": "feature/task-priority",
-  "version": "1.0",
-  "overview": "Add priority levels (High, Medium, Low) to tasks in the Task Manager application, allowing users to categorize and visually distinguish tasks by importance.",
+  "title": "Simple Time Management App",
+  "version": "2.0",
+  "branchName": "ralph/time-management-app",
+  "overview": "A clean, intuitive time management application that helps users track tasks with time estimates, monitor time spent, and manage their daily workload efficiently. The app focuses on simplicity while providing essential time tracking features.",
+  "problemStatement": {
+    "description": "People struggle to manage their time effectively.",
+    "painPoints": [
+      "Don't estimate how long tasks will take",
+      "Lose track of time spent on activities",
+      "Can't prioritize work based on available time",
+      "Have no visibility into their daily time allocation",
+      "Get overwhelmed by complex time tracking tools"
+    ]
+  },
+  "goalsAndMetrics": [
+    {
+      "goal": "Quick task capture",
+      "metric": "Users can create a task in < 5 seconds"
+    },
+    {
+      "goal": "Accurate time tracking",
+      "metric": "90% of tasks have time estimates"
+    },
+    {
+      "goal": "Simple time logging",
+      "metric": "Track time with 1-click start/stop"
+    },
+    {
+      "goal": "Daily overview",
+      "metric": "View total time planned vs spent"
+    },
+    {
+      "goal": "Minimal learning curve",
+      "metric": "New users productive within 2 minutes"
+    }
+  ],
   "userStories": [
     {
       "id": "US-1",
-      "title": "Priority Data Model & Default",
-      "description": "Add priority field to Task interface with type 'high' | 'medium' | 'low' and default to 'medium'",
+      "title": "Task Data Model & Basic Structure",
+      "persona": "user",
+      "action": "create tasks with estimated time duration",
+      "benefit": "plan my day effectively",
       "priority": 1,
-      "passes": true
+      "passes": true,
+      "acceptanceCriteria": [
+        "Task interface defined with all required fields",
+        "Basic App.tsx structure created",
+        "State management for tasks array set up"
+      ]
     },
     {
       "id": "US-2",
-      "title": "Priority Selection on Create",
-      "description": "Add priority selector to task creation form with options High, Medium, Low and default to Medium",
+      "title": "Task Creation Form",
+      "persona": "user",
+      "action": "create new tasks with title, time estimate, and category",
+      "benefit": "quickly add tasks to my list",
       "priority": 2,
-      "passes": true
+      "passes": false,
+      "acceptanceCriteria": [
+        "Input form with title field",
+        "Time estimate input (minutes) with default 30",
+        "Category dropdown (work/personal/urgent/other)",
+        "Add button creates task and clears form"
+      ]
     },
     {
       "id": "US-3",
-      "title": "Priority Visual Display",
-      "description": "Show priority indicator on each task card with color-coded badges (High=Red, Medium=Yellow, Low=Gray)",
+      "title": "Task Display with Time Info",
+      "persona": "user",
+      "action": "see tasks with estimated and actual time",
+      "benefit": "know what I can realistically complete",
       "priority": 3,
-      "passes": false
+      "passes": false,
+      "acceptanceCriteria": [
+        "Task list displays all tasks",
+        "Each task shows title, category badge",
+        "Display estimated time in readable format (e.g., 30 min)",
+        "Display actual time spent"
+      ]
     },
     {
       "id": "US-4",
-      "title": "Priority Editing",
-      "description": "Allow changing priority on existing tasks via inline dropdown",
+      "title": "Start/Stop Timer",
+      "persona": "user",
+      "action": "start/stop a timer for active tasks",
+      "benefit": "track actual time spent",
       "priority": 4,
-      "passes": false
+      "passes": false,
+      "acceptanceCriteria": [
+        "Start/Stop button on each task",
+        "Only one timer active at a time",
+        "Timer updates every second while active",
+        "Elapsed time added to actualMinutes",
+        "Visual indicator for active timer"
+      ]
+    },
+    {
+      "id": "US-5",
+      "title": "Time Summary Dashboard",
+      "persona": "user",
+      "action": "view total time planned and spent today",
+      "benefit": "manage my workload",
+      "priority": 5,
+      "passes": false,
+      "acceptanceCriteria": [
+        "Header shows total estimated time (pending tasks)",
+        "Shows total actual time spent today",
+        "Shows number of completed tasks",
+        "Shows time remaining",
+        "Visual progress bar/indicator"
+      ]
+    },
+    {
+      "id": "US-6",
+      "title": "Task Completion & Status",
+      "persona": "user",
+      "action": "mark tasks as complete",
+      "benefit": "track my progress",
+      "priority": 6,
+      "passes": false,
+      "acceptanceCriteria": [
+        "Complete button on each task",
+        "Status changes to 'completed'",
+        "Completed tasks visually distinguished",
+        "Can delete tasks"
+      ]
+    },
+    {
+      "id": "US-7",
+      "title": "Filter & Sort Tasks",
+      "persona": "user",
+      "action": "filter and sort my task list",
+      "benefit": "organize different types of work",
+      "priority": 7,
+      "passes": false,
+      "acceptanceCriteria": [
+        "Filter by status (All/Pending/In Progress/Completed)",
+        "Filter by category",
+        "Sort options (Created date, Estimated time, Actual time)"
+      ]
+    },
+    {
+      "id": "US-8",
+      "title": "Progress Bar & Time Indicators",
+      "persona": "user",
+      "action": "see visual indicators for time status",
+      "benefit": "quickly identify overdue items",
+      "priority": 8,
+      "passes": false,
+      "acceptanceCriteria": [
+        "Progress bar showing time completion %",
+        "Green bar when under estimate",
+        "Amber bar when near estimate (90%+)",
+        "Red bar when over estimate"
+      ]
+    },
+    {
+      "id": "US-9",
+      "title": "LocalStorage Persistence",
+      "persona": "user",
+      "action": "refresh the page without losing my tasks",
+      "benefit": "my data persists across sessions",
+      "priority": 9,
+      "passes": false,
+      "acceptanceCriteria": [
+        "Tasks saved to localStorage on every change",
+        "Tasks loaded from localStorage on app startup",
+        "Timer state preserved on refresh"
+      ]
+    }
+  ],
+  "functionalRequirements": [
+    {
+      "id": "FR-1",
+      "title": "Task Data Model",
+      "requirements": [
+        "id: string",
+        "title: string (required)",
+        "description: string (optional)",
+        "estimatedMinutes: number",
+        "actualMinutes: number",
+        "category: 'work' | 'personal' | 'urgent' | 'other'",
+        "status: 'pending' | 'in-progress' | 'completed'",
+        "isTimerActive: boolean",
+        "timerStartTime: number (optional)",
+        "createdAt: number",
+        "completedAt: number (optional)"
+      ]
+    },
+    {
+      "id": "FR-2",
+      "title": "Task Creation",
+      "requirements": [
+        "Input field for task title (required)",
+        "Time estimate input in minutes (default: 30)",
+        "Category selector dropdown",
+        "Optional description field",
+        "Add Task button",
+        "Validate title is not empty"
+      ]
+    },
+    {
+      "id": "FR-3",
+      "title": "Time Tracking",
+      "requirements": [
+        "Start/Stop timer button on each task",
+        "Only one timer can be active at a time",
+        "Timer updates every second while active",
+        "Automatically adds elapsed time to actualMinutes",
+        "Visual indicator for active timer (pulsing icon)"
+      ]
+    },
+    {
+      "id": "FR-4",
+      "title": "Task Display",
+      "requirements": [
+        "Show task title, category badge, and time info",
+        "Display estimated time vs actual time spent",
+        "Progress bar showing time completion percentage",
+        "Status indicator (pending, in-progress, completed)",
+        "Action buttons: Start/Stop, Complete, Delete"
+      ]
+    },
+    {
+      "id": "FR-5",
+      "title": "Time Summary Dashboard",
+      "requirements": [
+        "Total estimated time for all pending tasks",
+        "Total actual time spent today",
+        "Number of tasks completed today",
+        "Time remaining (estimated - actual)",
+        "Visual progress indicator"
+      ]
+    },
+    {
+      "id": "FR-6",
+      "title": "Task Management",
+      "requirements": [
+        "Mark tasks as complete (moves to completed section)",
+        "Delete tasks",
+        "Filter by: All, Pending, In Progress, Completed",
+        "Filter by category",
+        "Sort by: Created date, Estimated time, Actual time"
+      ]
+    },
+    {
+      "id": "FR-7",
+      "title": "Local Storage Persistence",
+      "requirements": [
+        "Save tasks to localStorage",
+        "Load tasks on app startup",
+        "Auto-save on every change",
+        "Preserve timer state on refresh"
+      ]
+    }
+  ],
+  "nonFunctionalRequirements": [
+    {
+      "category": "Performance",
+      "specification": "UI updates in < 50ms"
+    },
+    {
+      "category": "Responsiveness",
+      "specification": "Works on mobile, tablet, desktop"
+    },
+    {
+      "category": "Data Persistence",
+      "specification": "Tasks saved locally, no data loss"
+    },
+    {
+      "category": "Accessibility",
+      "specification": "Keyboard navigable, ARIA labels"
+    },
+    {
+      "category": "Browser Support",
+      "specification": "Chrome, Firefox, Safari, Edge (latest)"
     }
   ],
   "technicalApproach": {
-    "dataModel": {
-      "interface": "Task",
-      "fields": {
-        "id": "string",
-        "title": "string",
-        "completed": "boolean",
-        "priority": "'high' | 'medium' | 'low'"
-      }
+    "componentStructure": [
+      "App.tsx",
+      "TimeHeader (daily summary stats)",
+      "TaskInput (create new task form)",
+      "FilterControls (filter/sort options)",
+      "TaskList",
+      "TaskItem (individual task with timer)"
+    ],
+    "coreFunctions": [
+      "addTask(task: Omit<Task, 'id' | 'createdAt'>)",
+      "startTimer(taskId: string)",
+      "stopTimer(taskId: string)",
+      "completeTask(taskId: string)",
+      "deleteTask(taskId: string)",
+      "updateTask(taskId: string, updates: Partial<Task>)"
+    ]
+  },
+  "uiGuidelines": {
+    "colorScheme": {
+      "primary": "#3b82f6",
+      "success": "#10b981",
+      "warning": "#f59e0b",
+      "danger": "#ef4444",
+      "neutral": "#6b7280"
     },
-    "styling": {
-      "borderColors": {
-        "high": "#dc2626",
-        "medium": "#f59e0b",
-        "low": "#6b7280"
-      },
-      "badgeColors": {
-        "high": { "background": "#fecaca", "text": "#dc2626" },
-        "medium": { "background": "#fef3c7", "text": "#d97706" },
-        "low": { "background": "#e5e7eb", "text": "#4b5563" }
-      }
+    "typography": {
+      "headers": "24px, bold",
+      "taskTitles": "16px, medium",
+      "timeInfo": "14px, regular",
+      "categoryBadges": "12px, bold"
+    },
+    "timeStatusIndicators": {
+      "underEstimate": "Green progress bar",
+      "nearEstimate": "Amber progress bar (90%+)",
+      "overEstimate": "Red progress bar"
+    },
+    "categoryBadges": {
+      "work": "Blue",
+      "personal": "Purple",
+      "urgent": "Red",
+      "other": "Gray"
     }
-  }
+  },
+  "outOfScope": [
+    "Calendar integration",
+    "Recurring tasks",
+    "Team collaboration",
+    "Reports and analytics",
+    "Cloud sync",
+    "Mobile app",
+    "Notifications"
+  ],
+  "successCriteria": [
+    "User can create, track, and complete tasks",
+    "Timer accurately tracks time spent",
+    "Dashboard shows meaningful time summaries",
+    "App is responsive and performant",
+    "Data persists across sessions"
+  ],
+  "timeline": [
+    {
+      "phase": 1,
+      "deliverable": "Data model + basic UI structure",
+      "estimate": "2 hours"
+    },
+    {
+      "phase": 2,
+      "deliverable": "Task creation & display",
+      "estimate": "2 hours"
+    },
+    {
+      "phase": 3,
+      "deliverable": "Timer functionality",
+      "estimate": "2 hours"
+    },
+    {
+      "phase": 4,
+      "deliverable": "Summary dashboard",
+      "estimate": "1 hour"
+    },
+    {
+      "phase": 5,
+      "deliverable": "Filters & sorting",
+      "estimate": "1 hour"
+    },
+    {
+      "phase": 6,
+      "deliverable": "LocalStorage persistence",
+      "estimate": "1 hour"
+    },
+    {
+      "phase": 7,
+      "deliverable": "Styling & polish",
+      "estimate": "2 hours"
+    },
+    {
+      "phase": 8,
+      "deliverable": "Testing & bug fixes",
+      "estimate": "1 hour"
+    }
+  ],
+  "totalEstimate": "12 hours"
 }
