@@ -31,7 +31,7 @@ npm run typecheck
 
 2. Create a PRD for the feature you want:
    ```bash
-   amp
+   opencode
    # Then: Load the prd skill and create a PRD for [your feature]
    # Then: Load the ralph skill and convert tasks/prd-[name].md to prd.json
    ```
