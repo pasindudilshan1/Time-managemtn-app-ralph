@@ -25,3 +25,17 @@ Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
   - Categories are: 'work' | 'personal' | 'urgent' | 'other'
   - Status values are: 'pending' | 'in-progress' | 'completed'
 ---
+
+## [2026-01-17] - US-2
+Thread: https://ampcode.com/threads/$AMP_CURRENT_THREAD_ID
+- Implemented Task Creation Form with all required fields
+- Added input form with title field, time estimate input (default 30), category dropdown
+- Add button creates task and clears form, Enter key also submits
+- Form validation ensures title is not empty before creating task
+- Files changed: src/App.tsx
+- **Learnings for future iterations:**
+  - Use useState for form state management with controlled components
+  - Task creation follows the Task interface structure from FR-1
+  - Form clears automatically after successful task creation
+  - Enter key submission improves user experience
+---

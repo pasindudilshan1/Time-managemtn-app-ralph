@@ -57,7 +57,7 @@
       "action": "create new tasks with title, time estimate, and category",
       "benefit": "quickly add tasks to my list",
       "priority": 2,
-      "passes": false,
+      "passes": true,
       "acceptanceCriteria": [
         "Input form with title field",
         "Time estimate input (minutes) with default 30",
